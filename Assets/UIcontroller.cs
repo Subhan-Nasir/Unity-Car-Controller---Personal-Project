@@ -16,6 +16,7 @@ public class UIcontroller : MonoBehaviour{
     [Header("")]
     public GameObject pauseMenuUI;
     public GameObject inGameUI;
+    public GameObject optionsUI;
 
     [Header("")]
     public TextMeshProUGUI debugText;
@@ -39,7 +40,8 @@ public class UIcontroller : MonoBehaviour{
     }
     void Start(){
         inGameUI.SetActive(true);
-        pauseMenuUI.SetActive(false);        
+        pauseMenuUI.SetActive(false);   
+        optionsUI.SetActive(false);     
         
         
     }
@@ -68,15 +70,19 @@ public class UIcontroller : MonoBehaviour{
         gamePaused = true;
         pauseMenuUI.SetActive(true);
         inGameUI.SetActive(false);
+        optionsUI.SetActive(false);
         Time.timeScale = 0f;
+        AudioListener.pause = true;
 
     }
 
     public void ResumeGame(){
         gamePaused = false;
         pauseMenuUI.SetActive(false);
+        optionsUI.SetActive(false);
         inGameUI.SetActive(true);
         Time.timeScale = 1f;
+        AudioListener.pause = false;
 
     }
 
@@ -85,15 +91,31 @@ public class UIcontroller : MonoBehaviour{
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         gamePaused = false;
         Time.timeScale = 1f;
+        AudioListener.pause = false;
     }
 
     public void LoadOptions(){
+        optionsUI.SetActive(true);
+        pauseMenuUI.SetActive(false);
+        inGameUI.SetActive(false);
         Debug.Log("Options Pressed");
     }
 
     public void ExitGame(){
         Debug.Log("Exit Pressed");
         Application.Quit();
+    }
+
+    public void backButtion(){
+        pauseMenuUI.SetActive(true);
+        optionsUI.SetActive(false);
+        inGameUI.SetActive(false);
+    }
+
+    public void LoadScene(string sceneName){
+        SceneManager.LoadScene(sceneName);
+        Time.timeScale = 1f;
+        AudioListener.pause = false;
     }
 
 }
