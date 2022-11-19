@@ -14,11 +14,14 @@
         * A mountainous terrain
         * A flat ground (for testing/development).
 
-    * To setup a new car:
+    * To setup a new car (you can use included car as reference):
         * Import a 3d model of a car, ideally as single body and 4 separate wheel meshes. 
         * Attach rigidbody component to the car GameObject.
-        * Attach wheel collider components to all 4 wheels and input the right values.
+        * Attach empty game objects at the exact locations of each wheel
+        * Attach wheel collider components to the empty and 
+        input the right values (roughly 30,000 spring stiffness and 5,000 damping ratio for a 1000kg car).
         * Attach car controller script to the car gameobject
-        * Input the necessary values (engine curves, gear ratios etc) and press play.
+        * Input the necessary values (engine curve, gear ratios etc) and press play.
+        
 
 * Code is currently a work in progress. Comments, explanations and a video demo will be added soon.
