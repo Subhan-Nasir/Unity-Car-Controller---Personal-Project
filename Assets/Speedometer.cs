@@ -10,7 +10,7 @@ public class Speedometer : MonoBehaviour{
     public Transform needle;
     public TextMeshProUGUI gearLabel;
     public TextMeshProUGUI speedLabel;
-    public CarController carController;
+    private CarController carController;
     public Transform labelTemplate;
     public Transform minorTicksTemplate;
     public Image radialBar;
@@ -49,6 +49,13 @@ public class Speedometer : MonoBehaviour{
     // Start is called before the first frame update
 
     void Awake(){
+
+        // carController = gameObject.GetComponentInParent<CarController>();
+
+        // carController = gameObject.transform.parent.gameObject.GetComponent<UIcontroller>().carController;
+
+        
+
         labelTemplate.gameObject.SetActive(false);
         minorTicksTemplate.gameObject.SetActive(false);
         radialBar.transform.eulerAngles = new Vector3(0,0,minNeedleAngle);
@@ -68,6 +75,8 @@ public class Speedometer : MonoBehaviour{
 
     }
     void Start(){
+        
+        carController  = GameObject.FindGameObjectWithTag("UICanvas").GetComponent<UIcontroller>().carController;
         maxRPM = carController.maxRPM;
         redlineRPM = carController.redlineRPM;
         labelAmount = Mathf.RoundToInt(maxRPM/1000f) + 1;        

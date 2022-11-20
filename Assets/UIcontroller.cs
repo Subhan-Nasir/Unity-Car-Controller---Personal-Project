@@ -9,9 +9,14 @@ public class UIcontroller : MonoBehaviour{
 
 
     public static bool gamePaused;
-        
+    
+    public GameObject[] carList;
+    public int startingCar = 1;
+
+    [HideInInspector()]
     public CarController carController;
-    public Rigidbody car;
+    [HideInInspector()]
+    public Rigidbody carRigidBody;
 
     [Header("")]
     public GameObject pauseMenuUI;
@@ -36,9 +41,21 @@ public class UIcontroller : MonoBehaviour{
     void Awake(){
         gamePaused = false;
         controls = new NewControls();
+               
         
     }
+
     void Start(){
+        int carIndex = PlayerPrefs.GetInt("carIndex");  
+
+        for(int i = 0; i<carList.Length; i++){
+            carList[i].SetActive(false);
+        }              
+        carList[carIndex].SetActive(true);
+        Debug.Log($"Spawning car: {carIndex}");
+        carController = carList[carIndex].GetComponent<CarController>();
+        carRigidBody = carList[carIndex].GetComponent<Rigidbody>();
+        
         inGameUI.SetActive(true);
         pauseMenuUI.SetActive(false);   
         optionsUI.SetActive(false);     
@@ -49,7 +66,7 @@ public class UIcontroller : MonoBehaviour{
     // Update is called once per frame
     void Update(){
 
-        int speed = (int) Mathf.Round(car.velocity.magnitude*3.6f);        
+        int speed = (int) Mathf.Round(carRigidBody.velocity.magnitude*3.6f);        
         debugText.text = carController.debugText;  
 
         // pauseButton = controls.CarControls.PauseMenu.ReadValue<float>();
@@ -65,6 +82,21 @@ public class UIcontroller : MonoBehaviour{
 
 
     }
+
+    public void ActivateCar(int carIndex){
+
+        PlayerPrefs.SetInt("carIndex", carIndex);
+        PlayerPrefs.Save();
+        Debug.Log($"NEW CAR SELECTED: ID {carIndex}");
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);                
+        gamePaused = false;
+        Time.timeScale = 1f;
+        AudioListener.pause = false;
+        RestartGame();
+
+    }
+
+    
 
     public void PauseGame(){
         gamePaused = true;
@@ -88,7 +120,7 @@ public class UIcontroller : MonoBehaviour{
 
     public void RestartGame(){
         Debug.Log("Restart Pressed");
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);        
         gamePaused = false;
         Time.timeScale = 1f;
         AudioListener.pause = false;
